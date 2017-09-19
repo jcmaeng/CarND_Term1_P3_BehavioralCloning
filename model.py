@@ -7,7 +7,7 @@ import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 
 from keras.models import Sequential
-from keras.layers import Flatten, Dense, Lambda, Cropping2D
+from keras.layers import Flatten, Dense, Lambda, Cropping2D, Dropout
 from keras.layers.convolutional import Conv2D
 from keras.layers.pooling import MaxPooling2D
 
@@ -77,26 +77,34 @@ def generator(lines, BATCH_SIZE):
           augmented_measurements = []
 
           for image, measurement in zip(images, measurements):
-            augmented_images.append(image)
-            augmented_measurements.append(measurement)
-            augmented_images.append(cv2.flip(image, 1))
-            augmented_measurements.append(measurement*-1.0)
+            flip_prob = np.random.random()
+            if flip_prob > 0.5:
+                augmented_images.append(cv2.flip(image, 1))
+                augmented_measurements.append(measurement*-1.0)
+            else:
+                augmented_images.append(image)
+                augmented_measurements.append(measurement)
+            
 
             X_train = np.array(augmented_images)
             y_train = np.array(augmented_measurements)
             yield shuffle(X_train, y_train)
 
+def image_preproccesing(input):
+    from keras.backend import tf as ktf
+    output = ktf.image.resize_images(input, (80, 160))
+    return (output/255.0-0.5)
 
 ## flattened image connecting to simple output node, it will predict
 
 model = Sequential()
-model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape=(160, 320, 3), output_shape=(160, 320, 3)))
-model.add(Cropping2D(cropping=((70,25),(0,0))))
+model.add(Lambda(image_preproccesing, input_shape=(160, 320, 3), output_shape=(80, 160, 3)))
+model.add(Cropping2D(cropping=((30,10),(0,0))))
 model.add(Conv2D(24, (5,5), strides=(2,2), activation="relu"))
 model.add(Conv2D(36, (5,5), strides=(2,2), activation="relu"))
 model.add(Conv2D(48, (5,5), strides=(2,2), activation="relu"))
-model.add(Conv2D(64, (3,3), activation="relu"))
-model.add(Conv2D(64, (3,3), activation="relu"))
+#model.add(Conv2D(64, (3,3), activation="relu"))
+#model.add(Conv2D(64, (3,3), activation="relu"))
 model.add(Flatten())
 model.add(Dense(100))
 model.add(Dense(50))
@@ -131,4 +139,4 @@ plt.legend(['training set', 'validation set'], loc='upper right')
 plt.show()
 
 model.save('model.h5')
-print('model.h5 Completed')
+print('model.h5 Saved')
