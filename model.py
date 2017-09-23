@@ -60,14 +60,26 @@ def generator(lines, BATCH_SIZE):
           image_right = cv2.imread('../IMG/'+ filename)
 
           # create adjusted steering measurements for the side camera images
-          correction = 0.2 # this is a parameter to tune
+          correction = 0.25 # this is a parameter to tune
           
           steering_left = steering_center + correction
           steering_right = steering_center - correction
 
           # add images and angles to data set
-          images.extend([image_center, image_left, image_right])
-          measurements.extend([steering_center, steering_left, steering_right])
+#          images.extend([image_center, image_left, image_right])
+#          measurements.extend([steering_center, steering_left, steering_right])
+          camera = np.random.choice(['center', 'right', 'left'])
+          if camera == 'center':
+            images.extend([image_center])
+            measurements.extend([steering_center])
+          elif camera == 'right':
+            images.extend([image_right])
+            measurements.extend([steering_right])
+          elif camera == 'left':
+            images.extend([image_left])
+            measurements.extend([steering_left])
+          else:
+            pass
 
           ## measurements.append(measurement)
           images, measurements = shuffle(images, measurements)
@@ -103,8 +115,8 @@ model.add(Cropping2D(cropping=((30,10),(0,0))))
 model.add(Conv2D(24, (5,5), strides=(2,2), activation="relu"))
 model.add(Conv2D(36, (5,5), strides=(2,2), activation="relu"))
 model.add(Conv2D(48, (5,5), strides=(2,2), activation="relu"))
-#model.add(Conv2D(64, (3,3), activation="relu"))
-#model.add(Conv2D(64, (3,3), activation="relu"))
+model.add(Conv2D(64, (2,2), activation="relu"))
+model.add(Conv2D(64, (1,1), activation="relu"))
 model.add(Flatten())
 model.add(Dense(100))
 model.add(Dense(50))
@@ -121,10 +133,10 @@ validation_generator = generator(validation_samples, BATCH_SIZE)
 
 print('training and validation generation Completed')
 
-sample_epochs = (1 * ((len(train_samples)) //BATCH_SIZE) * BATCH_SIZE)
+sample_epochs = ((len(train_samples) //BATCH_SIZE) * BATCH_SIZE)
 print(' length of samples ', sample_epochs)
 
-history_object = model.fit_generator(generator=train_generator, steps_per_epoch=sample_epochs, validation_data=validation_generator, verbose=1, validation_steps=len(validation_samples), epochs=5)
+history_object = model.fit_generator(generator=train_generator, steps_per_epoch=sample_epochs, validation_data=validation_generator, verbose=1, validation_steps=len(validation_samples), epochs=3)
 
 ### print the keys contained in the history object
 print(history_object.history.keys())
