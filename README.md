@@ -10,3 +10,4 @@ This is my repository to manage source code for Behavioral Cloning project. It i
 - model.h5: Trained model file
 - video.py: Given code for producing video files from image data of simulator
 - video.mp4: Video file - autonomous driving with my model in simulator
+- writeup.md: Writeup markup file
