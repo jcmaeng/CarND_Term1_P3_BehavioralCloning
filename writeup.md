@@ -74,14 +74,13 @@ The summary of my model is as follows.
 
 #### 2. Attempts to reduce overfitting in the model
 
-The model contains dropout layers in order to reduce overfitting (model.py lines 21). 
-
-The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 10-16). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+In my model, there is no regularization to reduce overfitting. For iterative training and testing my model, I have applied dropout layer to my model but it is not show the useful effect. Then I searched the way to reduce overfitting and I found that more training data is effective. From the simulator, I gathered more data at the second track and I got the expected result.
 
 #### 3. Model parameter tuning
 
 The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 127).
 
+----------------
 #### 4. Appropriate training data
 
 Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road ... 
