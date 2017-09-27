@@ -10,13 +10,7 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/placeholder.png "Model Visualization"
-[image2]: ./examples/placeholder.png "Grayscaling"
-[image3]: ./examples/placeholder_small.png "Recovery Image"
-[image4]: ./examples/placeholder_small.png "Recovery Image"
-[image5]: ./examples/placeholder_small.png "Recovery Image"
-[image6]: ./examples/placeholder_small.png "Normal Image"
-[image7]: ./examples/placeholder_small.png "Flipped Image"
+[image1]: ./images/self-driving.png "Self Driving in Autonomous Mode"
 
 ## Rubric Points
 Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
@@ -90,5 +84,9 @@ To augment data set, flipped image was applied randomly.
 
 I finally randomly shuffled the data set and put 20% of the data into a validation set.
 
+### Simulation
 
-In the running simulator, I found the car which drove itself with my model. It could drive every lap safely.
+After training, I run the simulator in autonomous mode with the trained model and data.
+Finally, I found the car which drove itself correctly on the road.
+
+![self-driving][image1]
