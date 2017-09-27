@@ -46,7 +46,8 @@ The model.py file contains the code for training and saving the convolution neur
 
 #### 1. An appropriate model architecture has been employed
 
-I use the NVIDIA model to complete this project. In that model, I add and modify some layers and parameters.
+As a starting point to make model, I took the NVIDIA model. 
+In that model, I added and modified some layers and parameters.
 For the first layer, I add Lamda layer to prepare data for training and validating (model.py line 113).
 The image_processing() function is for Lamda layer to resize and normalize each image in data.
 And the second layer is cropping layer to crop images to speed up training and validating process (model.py line 114).
@@ -71,72 +72,23 @@ The summary of my model is as follows.
 |dense_3 (Dense)         |     (None, 10)           |     510       |
 |dense_4 (Dense)         |     (None, 1)            |     11        |
 
-
 #### 2. Attempts to reduce overfitting in the model
 
-In my model, there is no regularization to reduce overfitting. For iterative training and testing my model, I have applied dropout layer to my model but it is not show the useful effect. Then I searched the way to reduce overfitting and I found that more training data is effective. From the simulator, I gathered more data at the second track and I got the expected result.
+In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting.
+
+In my model, there is no regularization to reduce overfitting. For iterative training and testing my model, I had applied dropout layer to my model but it did not show the useful effect. Then I searched the way to reduce overfitting and found that more training data is effective. From the simulator, I gathered more data at the second track and I got the expected result.
 
 #### 3. Model parameter tuning
 
 The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 127).
 
-----------------
+
 #### 4. Appropriate training data
 
-Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road ... 
+Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road in both tracks. This training data was resized and normalized at the first step of the model. During training and testing, I used randomly selected images between center, right and left camera. And, for the steering data, I applied a correction value, 0.25. The value was added when the right datum was selected but it was subtracted when the left datum was choosen.
+To augment data set, flipped image was applied randomly.
 
-For details about how I created the training data, see the next section. 
-
-### Model Architecture and Training Strategy
-
-#### 1. Solution Design Approach
-
-The overall strategy for deriving a model architecture was to ...
-
-My first step was to use a convolution neural network model similar to the ... I thought this model might be appropriate because ...
-
-In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. 
-
-To combat the overfitting, I modified the model so that ...
-
-Then I ... 
-
-The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track... to improve the driving behavior in these cases, I ....
-
-At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
-
-#### 2. Final Model Architecture
-
-The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes ...
-
-Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
-
-![alt text][image1]
-
-#### 3. Creation of the Training Set & Training Process
-
-To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
-
-![alt text][image2]
-
-I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
-
-![alt text][image3]
-![alt text][image4]
-![alt text][image5]
-
-Then I repeated this process on track two in order to get more data points.
-
-To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
-
-![alt text][image6]
-![alt text][image7]
-
-Etc ....
-
-After the collection process, I had X number of data points. I then preprocessed this data by ...
+I finally randomly shuffled the data set and put 20% of the data into a validation set.
 
 
-I finally randomly shuffled the data set and put Y% of the data into a validation set. 
-
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+In the running simulator, I found the car which drove itself with my model. It could drive every lap safely.
